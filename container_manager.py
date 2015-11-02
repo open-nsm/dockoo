@@ -22,7 +22,9 @@ class ContainerMan():
     def start_container(self):
         self.a_container_is_running = True
         os.system("docker start %s" % self.image_name)
-
+    def stop_container(self):
+        os.system("docker stop --time=30 %s" % self.image_name)
+        os.system("docker rm %s" % self.image_name)
 
 def main():
     # Check to make sure user passed in a pcap file
