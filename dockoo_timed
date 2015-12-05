@@ -1,0 +1,22 @@
+#! /usr/bin/python
+# container_manager is part of the dockoo system
+# For Open-NSM and Senior Thesis at UIUC
+# November 1, 2015
+# SEE https://github.com/open-nsm/dockoo.git FOR MORE INFO
+import sys
+import time
+import subprocess
+
+__author__ = 'Shane Rogers'
+
+command = "sudo docker run -t -i -v /home/bust3r/malware_files:/mnt/malware_files strace /usr/bin/strace /mnt/malware_files/testfile"
+start_time = time.time()
+subprocess.call("sudo docker run -t -i -v /home/bust3r/malware_files:/mnt/malware_files strace /usr/bin/strace /mnt/malware_files/testfile", shell=True)
+end_time = time.time()
+
+print "Start time was ", 
+print start_time
+print "Completion time was ",
+print end_time
+print "Elapsed time was",
+print  end_time - start_time
