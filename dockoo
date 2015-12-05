@@ -10,7 +10,7 @@ import subprocess
 __author__ = 'Shane Rogers, Jon Schipp'
 
 def create_command(container_name, malware_file):
-  command = "sudo docker run -t -i -v /home/bust3r/malware_files:/mnt/malware_files "
+  command = "sudo docker run -t -i -v /home/ubuntu/malware_files:/mnt/malware_files "
   command = command + container_name
   if container_name == "strace":
     command = command + " /usr/bin/strace /mnt/malware_files/" + malware_file
@@ -18,10 +18,15 @@ def create_command(container_name, malware_file):
   else:
     return 0
 
+def report(start_time, end_time):
+    print "Start time was", start_time
+    print "Completion time was", end_time
+    print "Elapsed time was", end_time - start_time
+
 def main():
   if len(sys.argv) != 3:
-    print("Usage: ./container_manager <docker image name> <malware filename> ")
-    print "For more info try: ./container_manager --help"
+    print("Usage: ./dockoo <docker image name> <malware filename> ")
+    print "For more info try: ./dockoo --help"
     exit()
 
   if sys.argv[1] == "--help":
@@ -39,13 +44,7 @@ def main():
     start_time = time.time()
     subprocess.call(command, shell=True)
     end_time = time.time()
-
-    print "Start time was ",
-    print start_time
-    print "Completion time was ",
-    print end_time
-    print "Elapsed time was",
-    print  end_time - start_time
+    report(start_time, end_time)
 
 if __name__ == "__main__":
     main()
