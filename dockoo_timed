@@ -16,28 +16,28 @@ def create_command(container_name, malware_file):
 		command = command + " /usr/bin/strace /mnt/malware_files/" + malware_file
 		return command
 	else:
-	 return 0
+		return 0
 
 
 
 def main():
 	if len(sys.argv) != 3:
-        print("Usage: ./container_manager <docker image name> <malware filename> ")
-        print "For more info try: ./container_manager --help"
-        exit()
+		print("Usage: ./container_manager <docker image name> <malware filename> ")
+		print "For more info try: ./container_manager --help"
+		exit()
 
-    if sys.argv[1] == "--help":
-        print "#  This function takes as input the name of a malware file located in dockoo/malware_files/"
-        print "#  and the name of malware container image and spins the container up while passing the malware to it."
-        print "#  WARNING"
-        print "#  This function does not currently sanitize user input in any way, so if you"
-        print "#  give it a funny value for the malware file name or try to create a container"
-        print "#  from a nonexistent image, it will break.  Send questions or comments to shane@shanerogers.info"
-        exit()
+	if sys.argv[1] == "--help":
+		print "#  This function takes as input the name of a malware file located in dockoo/malware_files/"
+		print "#  and the name of malware container image and spins the container up while passing the malware to it."
+		print "#  WARNING"
+		print "#  This function does not currently sanitize user input in any way, so if you"
+		print "#  give it a funny value for the malware file name or try to create a container"
+		print "#  from a nonexistent image, it will break.  Send questions or comments to shane@shanerogers.info"
+		exit()
 
-    else:
-        image_name = sys.argv[1]
-        malware_file = sys.argv[2]
+	else:
+		image_name = sys.argv[1]
+		malware_file = sys.argv[2]
 		command = create_command(image_name, malware_file)
 		start_time = time.time()
 		subprocess.call(command, shell=True)
