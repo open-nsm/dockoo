@@ -10,7 +10,7 @@ import argparse
 __author__ = 'Shane Rogers, Jon Schipp'
 
 def create_command(image, filename, debug):
-  command = "docker run -it -v %s:%s %s %s %s" % (filename, filename, image, image, filename)
+  command = "docker run -it -v %s:%s %s %s %s" % (filename, filename, image, image.split('/')[-1], filename)
   if debug: 
     print 'Debug: %s' % command
   return command
