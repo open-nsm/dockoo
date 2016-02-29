@@ -7,7 +7,7 @@
 import docker
 import ConfigParser
 import time
-# For running on OSX docker-machine uncomment imports below
+# For running on OSX/docker-machine uncomment imports below
 #from os import path
 #import docker.tls as tls
 
@@ -36,10 +36,11 @@ command2run = command_line_exe + " " + malware_file
 # Make a connection to Docker
 c = docker.Client(base_url='unix://var/run/docker.sock')
 
-# For docker-machine on OSX, this should work. 
-# IP address and port comes from command "docker-machine env default". 
-# Should be added to conf file at some point.
-# For running on OSX comment out line above uncomment code below
+# For running on OSX/docker-machine comment out line above. Uncomment code below.
+
+#ip_address = config.get(docker_tool, "ip_address")
+#port = config.get(docker_tool, "port")
+#address_str = 'https://' + ip_address + ':' + port
 
 #CERTS = CERTS = path.join(path.expanduser('~'), '.docker', 'machine', 'machines', 'default')
 #tls_config = tls.TLSConfig(
@@ -48,7 +49,7 @@ c = docker.Client(base_url='unix://var/run/docker.sock')
 #    verify=True,
 #    assert_hostname=False
 #)
-#c = docker.Client(base_url='https://192.168.99.100:2376', tls=tls_config)
+#c = docker.Client(base_url=address_str, tls=tls_config)
 
 # Grab the image
 c.images(container_name)
