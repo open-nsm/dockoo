@@ -1,14 +1,15 @@
 #!/usr/bin/python
 
-# To run this script, install and start Docker first.  You also need to 
-# get the Docker images you want to run.  You can do this with a
-# command like "sudo docker pull remnux/pescanner"
+# To run this script, install and start Docker first.  You also need to
+# get the Docker images you want to run.  You can do this with a command
+# like "docker pull remnux/pescanner"
 
 import docker
 import ConfigParser
 import time
-# For running on OSX (still needs to be tested)
-#from docker.utils import kwargs_from_env
+# For running on OSX docker-machine uncomment imports below
+#from os import path
+#import docker.tls as tls
 
 # Location of config file
 cfgfile = "remnux.conf"
@@ -34,8 +35,22 @@ command2run = command_line_exe + " " + malware_file
 
 # Make a connection to Docker
 c = docker.Client(base_url='unix://var/run/docker.sock')
-# If running on OSX comment out line above and use line below (needs testing)
-# c = Client(**kwargs_from_env())
+
+# For docker-machine on OSX, this should work but will 
+# throw "InsecureRequestWarning" errors.
+# Probably not that big a deal for developing/debugging for now.  
+# As docker-machine matures, maybe a better solution will become available.
+# IP address and port comes from command "docker-machine env default". 
+# Should be added to conf file at some point.
+# For running on OSX comment out line above uncomment code below
+
+#CERTS = CERTS = path.join(path.expanduser('~'), '.docker', 'machine', 'machines', 'default')
+#tls_config = tls.TLSConfig(
+#    client_cert=(path.join(CERTS, 'cert.pem'), path.join(CERTS,'key.pem')),
+#    ca_cert=path.join(CERTS, 'ca.pem'),
+#    verify=False
+#)
+#c = docker.Client(base_url='https://192.168.99.100:2376', tls=tls_config)
 
 # Grab the image
 c.images(container_name)
