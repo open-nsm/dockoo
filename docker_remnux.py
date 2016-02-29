@@ -36,10 +36,7 @@ command2run = command_line_exe + " " + malware_file
 # Make a connection to Docker
 c = docker.Client(base_url='unix://var/run/docker.sock')
 
-# For docker-machine on OSX, this should work but will 
-# throw "InsecureRequestWarning" errors.
-# Probably not that big a deal for developing/debugging for now.  
-# As docker-machine matures, maybe a better solution will become available.
+# For docker-machine on OSX, this should work. 
 # IP address and port comes from command "docker-machine env default". 
 # Should be added to conf file at some point.
 # For running on OSX comment out line above uncomment code below
@@ -48,7 +45,8 @@ c = docker.Client(base_url='unix://var/run/docker.sock')
 #tls_config = tls.TLSConfig(
 #    client_cert=(path.join(CERTS, 'cert.pem'), path.join(CERTS,'key.pem')),
 #    ca_cert=path.join(CERTS, 'ca.pem'),
-#    verify=False
+#    verify=True,
+#    assert_hostname=False
 #)
 #c = docker.Client(base_url='https://192.168.99.100:2376', tls=tls_config)
 
