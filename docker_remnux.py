@@ -7,9 +7,8 @@
 import docker
 import ConfigParser
 import time
-# For running on OSX/docker-machine uncomment imports below
-#from os import path
-#import docker.tls as tls
+from os import path
+import docker.tls as tls
 
 # Location of config file
 cfgfile = "remnux.conf"
@@ -26,30 +25,35 @@ config.read(cfgfile)
 container_name = config.get(docker_tool, "container_name")
 local_working_dir = config.get(docker_tool, "local_working_dir")
 docker_bind_dir = config.get(docker_tool, "docker_bind_dir")
-command_line_exe = config.get(docker_tool, "command_line_exe") 
+command_line_exe = config.get(docker_tool, "command_line_exe")
 options = config.get(docker_tool, "options")
 mode = config.get(docker_tool, "mode")
+
+# Docker or docker-machine
+docker_exec = config.get("docker", "docker_exec")
 
 # The command to run -- add options later?
 command2run = command_line_exe + " " + malware_file
 
-# Make a connection to Docker
-c = docker.Client(base_url='unix://var/run/docker.sock')
+c = docker.Client()
 
-# For running on OSX/docker-machine comment out line above. Uncomment code below.
+# Make a connection to docker
+if (docker_exec.lower() == 'docker'):
+    c = docker.Client(base_url='unix://var/run/docker.sock')
 
-#ip_address = config.get(docker_tool, "ip_address")
-#port = config.get(docker_tool, "port")
-#address_str = 'https://' + ip_address + ':' + port
-
-#CERTS = CERTS = path.join(path.expanduser('~'), '.docker', 'machine', 'machines', 'default')
-#tls_config = tls.TLSConfig(
-#    client_cert=(path.join(CERTS, 'cert.pem'), path.join(CERTS,'key.pem')),
-#    ca_cert=path.join(CERTS, 'ca.pem'),
-#    verify=True,
-#    assert_hostname=False
-#)
-#c = docker.Client(base_url=address_str, tls=tls_config)
+# Make a connection to docker-machine
+if (docker_exec.lower() == 'docker-machine'):
+    ip_address = config.get("docker", "ip_address")
+    port = config.get("docker", "port")
+    address_str = 'https://' + ip_address + ':' + port
+    certs = config.get("docker", "cert_path")
+    tls_config = tls.TLSConfig(
+        client_cert=(path.join(certs, 'cert.pem'), path.join(certs,'key.pem')),
+        ca_cert=path.join(certs, 'ca.pem'),
+        verify=True,
+        assert_hostname=False
+    )
+    c = docker.Client(base_url=address_str, tls=tls_config)
 
 # Grab the image
 c.images(container_name)
@@ -80,4 +84,3 @@ while (num_containers > 0):
 # Access output logs
 output = c.logs(cntnr)
 print(output)
-
